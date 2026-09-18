@@ -1,0 +1,70 @@
+# Checked-in defaults. No secrets here -- secrets come from .env (see .env.example).
+# Override any of this via a local config/local.yaml (gitignored) or environment
+# variables prefixed AUTOPOST_ (nested keys joined with "__", e.g. AUTOPOST_TIKTOK__PRIVACY_LEVEL).
+
+llm:
+  base_url: "http://localhost:20128/v1"
+  model: "auto/best-chat"
+  temperature: 0.85
+  max_tokens: 2000
+  request_timeout_sec: 60
+  max_retries: 3
+
+tts:
+  voice: "en-US-GuyNeural"
+  rate: "+0%"
+  pitch: "+0Hz"
+
+stock:
+  provider_priority: ["pexels", "pixabay"]
+  orientation: "portrait"
+  min_clip_duration_sec: 3
+  max_results_per_query: 15
+
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  target_duration_min_sec: 60
+  target_duration_max_sec: 90
+  hook_duration_sec: 3
+  caption_font_size: 64
+  narration_volume_db: 0
+  background_music_volume_db: -18
+
+niche:
+  active_niche: "finance_education"
+  disclaimer_text: "Educational content only. Not financial advice."
+  topic_dedupe_window_days: 120
+
+tiktok:
+  redirect_uri: "http://localhost:8787/oauth/callback"
+  scopes: ["user.info.basic", "video.publish"]
+  privacy_level: "SELF_ONLY"       # SELF_ONLY | PUBLIC_TO_EVERYONE -- flip only after audit_status: approved
+  audit_status: "unaudited"        # unaudited | approved -- code force-clamps privacy_level until approved
+  disable_duet: false
+  disable_stitch: false
+  disable_comment: false
+  max_posts_per_day: 2             # hard-clamped to absolute_daily_ceiling regardless of this value
+  absolute_daily_ceiling: 15
+  min_hours_between_posts: 6
+  posting_window_start_hour: 9
+  posting_window_end_hour: 21
+  timezone: "America/New_York"
+  requests_per_minute_limit: 6
+  api_base_url: "https://open.tiktokapis.com"
+
+scheduler:
+  pipeline_interval_minutes: 60
+  analytics_poll_interval_minutes: 360
+  human_approval_required: false
+
+web:
+  host: "0.0.0.0"
+  port: 8080
+
+storage:
+  data_dir: "./data"   # docker-compose.yml overrides this to /data (the mounted volume)
+
+logging:
+  level: "INFO"

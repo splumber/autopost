@@ -1,0 +1,10 @@
+.venv/
+.browser-profile/
+__pycache__/
+*.pyc
+.env
+data/
+assets_bundled/music/*.mp3
+!assets_bundled/music/.gitkeep
+.pytest_cache/
+*.egg-info/

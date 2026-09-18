@@ -1,0 +1,12 @@
+:root { color-scheme: light dark; }
+body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 1rem; }
+nav { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid #8883; padding-bottom: 0.75rem; }
+nav a { text-decoration: none; font-weight: 600; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; }
+th, td { border: 1px solid #8883; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.9rem; }
+.muted { color: #888; font-size: 0.85rem; }
+.warn { color: #c0392b; font-weight: 600; }
+.button, button { background: #2c3e50; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+form label { display: block; margin-bottom: 0.8rem; }
+form select, form input { display: block; margin-top: 0.2rem; padding: 0.3rem; }
+pre { background: #8881; padding: 1rem; overflow-x: auto; font-size: 0.8rem; }

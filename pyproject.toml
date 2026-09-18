@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autopost"
+version = "0.1.0"
+description = "Single-account faceless TikTok content automation service"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "pyyaml>=6.0",
+  "httpx>=0.27",
+  "fastapi>=0.111",
+  "uvicorn[standard]>=0.30",
+  "jinja2>=3.1",
+  "python-multipart>=0.0.9",
+  "cryptography>=42.0",
+  "edge-tts>=6.1",
+  "imageio-ffmpeg>=0.5",
+  "tzdata>=2024.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/autopost"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

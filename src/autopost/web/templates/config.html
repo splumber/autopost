@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Settings - autopost{% endblock %}
+{% block content %}
+<h1>Settings</h1>
+<form method="post" action="/config">
+  <label>Content niche
+    <select name="active_niche">
+      {% for n in niches %}
+      <option value="{{ n }}" {% if cfg.niche.active_niche == n %}selected{% endif %}>{{ n }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Posting mode
+    <select name="human_approval_required">
+      <option value="false" {% if not cfg.scheduler.human_approval_required %}selected{% endif %}>Fully autonomous</option>
+      <option value="true" {% if cfg.scheduler.human_approval_required %}selected{% endif %}>Human approval queue</option>
+    </select>
+  </label>
+
+  <label>Max posts per day (hard ceiling: {{ cfg.tiktok.absolute_daily_ceiling }})
+    <input type="number" name="max_posts_per_day" value="{{ cfg.tiktok.max_posts_per_day }}" min="1" max="{{ cfg.tiktok.absolute_daily_ceiling }}">
+  </label>
+
+  <label>Minimum hours between posts
+    <input type="number" name="min_hours_between_posts" value="{{ cfg.tiktok.min_hours_between_posts }}" min="1">
+  </label>
+
+  <label>TikTok content audit status
+    <select name="audit_status">
+      <option value="unaudited" {% if cfg.tiktok.audit_status == "unaudited" %}selected{% endif %}>unaudited (posts stay private)</option>
+      <option value="approved" {% if cfg.tiktok.audit_status == "approved" %}selected{% endif %}>approved (posts can go public)</option>
+    </select>
+  </label>
+
+  <label>Desired privacy level (only applies once audit_status = approved)
+    <select name="privacy_level">
+      <option value="SELF_ONLY" {% if cfg.tiktok.privacy_level == "SELF_ONLY" %}selected{% endif %}>SELF_ONLY (private)</option>
+      <option value="PUBLIC_TO_EVERYONE" {% if cfg.tiktok.privacy_level == "PUBLIC_TO_EVERYONE" %}selected{% endif %}>PUBLIC_TO_EVERYONE</option>
+    </select>
+  </label>
+
+  <button type="submit">Save</button>
+</form>
+
+<h2>Full resolved config (secrets redacted)</h2>
+<pre>{{ cfg }}</pre>
+{% endblock %}

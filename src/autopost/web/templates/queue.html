@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Content Queue - autopost{% endblock %}
+{% block content %}
+<h1>Content Queue</h1>
+
+{% for status, items in buckets.items() %}
+<h2>{{ status }} ({{ items|length }})</h2>
+{% if items %}
+<table>
+  <tr><th>ID</th><th>Caption</th><th>Duration</th><th>Scheduled</th><th>Video</th><th>Actions</th></tr>
+  {% for item in items %}
+  <tr>
+    <td>{{ item["id"] }}</td>
+    <td>{{ (item["caption_text"] or "")[:80] }}</td>
+    <td>{{ "%.0f"|format(item["duration_sec"]) if item["duration_sec"] else "-" }}s</td>
+    <td>{{ item["scheduled_for"] or "-" }}</td>
+    <td>{% if item["video_path"] %}<a href="/queue/{{ item['id'] }}/video">preview</a>{% endif %}</td>
+    <td>
+      {% if status == "pending_review" %}
+      <form method="post" action="/queue/{{ item['id'] }}/approve" style="display:inline"><button>Approve</button></form>
+      <form method="post" action="/queue/{{ item['id'] }}/reject" style="display:inline"><button>Reject</button></form>
+      {% elif status == "failed" %}
+      <span class="muted">{{ (item["error_message"] or "")[:100] }}</span>
+      <form method="post" action="/queue/{{ item['id'] }}/retry" style="display:inline"><button>Retry</button></form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p class="muted">None</p>
+{% endif %}
+{% endfor %}
+{% endblock %}

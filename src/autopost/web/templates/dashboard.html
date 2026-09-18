@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - autopost{% endblock %}
+{% block content %}
+<h1>Account</h1>
+{% if account %}
+  <p>Linked: <strong>@{{ account["tiktok_username"] or account["tiktok_open_id"] }}</strong> (since {{ account["linked_at"] }})</p>
+{% else %}
+  <p class="warn">No TikTok account linked yet.</p>
+  <p><a class="button" href="/oauth/link">Link TikTok Account</a></p>
+{% endif %}
+
+<h1>Content Pipeline</h1>
+<table>
+  <tr>
+    <th>Pending review</th><th>Approved</th><th>Scheduled</th><th>Posted</th><th>Failed</th>
+  </tr>
+  <tr>
+    <td>{{ counts["pending_review"] }}</td>
+    <td>{{ counts["approved"] }}</td>
+    <td>{{ counts["scheduled"] }}</td>
+    <td>{{ counts["posted"] }}</td>
+    <td>{{ counts["failed"] }}</td>
+  </tr>
+</table>
+
+<h1>Creator Rewards progress</h1>
+{% if rewards %}
+  <table>
+    <tr><th>Followers</th><td>{{ rewards["followers"] }} / {{ follower_threshold }}</td></tr>
+    <tr><th>Trailing 30-day views</th><td>{{ rewards["trailing_30d_views"] }} / {{ views_threshold }}</td></tr>
+    <tr><th>Eligible videos (&ge;60s)</th><td>{{ rewards["eligible_video_count"] }}</td></tr>
+    <tr><th>Eligible now</th><td>{{ "Yes" if rewards["is_eligible"] else "Not yet" }}</td></tr>
+  </table>
+  <p class="muted">Last checked: {{ rewards["snapshot_date"] }}</p>
+{% else %}
+  <p class="muted">No analytics yet -- link your account and post your first video to start tracking.</p>
+{% endif %}
+<p class="muted">Once eligible, enroll in Creator Rewards from inside the TikTok app yourself -- this isn't exposed via any public API (see docs/SETUP_CHECKLIST.md).</p>
+
+<h1>Publishing status</h1>
+<p>audit_status: <strong>{{ settings.tiktok.audit_status }}</strong> &middot;
+   configured privacy_level: <strong>{{ settings.tiktok.privacy_level }}</strong> &middot;
+   effective (enforced): <strong>{{ settings.tiktok.effective_privacy_level }}</strong></p>
+{% if settings.tiktok.effective_privacy_level == "SELF_ONLY" %}
+<p class="warn">Posts are currently private (SELF_ONLY) until TikTok approves your app's content audit. See docs/SETUP_CHECKLIST.md.</p>
+{% endif %}
+
+<h1>Recent job runs</h1>
+<table>
+  <tr><th>Job</th><th>Started</th><th>Status</th><th>Detail</th></tr>
+  {% for job in jobs %}
+  <tr>
+    <td>{{ job["job_name"] }}</td>
+    <td>{{ job["started_at"] }}</td>
+    <td>{{ job["status"] }}</td>
+    <td class="muted">{{ job["detail"] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
